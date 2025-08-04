@@ -1,1 +1,1 @@
-#inicializador do projeto
+#inicializador do projeto, entende que é um pacote python
