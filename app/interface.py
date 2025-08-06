@@ -1,9 +1,11 @@
 #interface grafica do projeto
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import csv
 from datetime import datetime
 import os
+from core.validacao import validar_data
+
 
 class AppInterface(): #inicializar e definir a estilizacao da janela principal
     def __init__(self, master):
@@ -71,15 +73,30 @@ class AppInterface(): #inicializar e definir a estilizacao da janela principal
 
         def salvar():
 
-                destinatario = entry_destinatario.get()
-                remetente = entry_remetente.get()
-                tipo = entry_nome.get()
-                data_entrada = entry_entrada.get()
-                data_validade = entry_vencimento.get()
-                observacao = entry_obs.get()
+                destinatario = entry_destinatario.get().strip()
+                remetente = entry_remetente.get().strip()
+                tipo = entry_nome.get().strip()
+                data_entrada = entry_entrada.get().strip()
+                data_validade = entry_vencimento.get().strip()
+                observacao = entry_obs.get().strip()
 
-                print(destinatario, remetente, tipo, data_entrada, data_validade, observacao)
-        
+                #validacoes 
+                if not destinatario or not remetente or not tipo or not data_entrada or not data_validade:
+                    messagebox.showerror("Erro", "Prencha todos os campos obrigatórios.")
+                    return
+                
+                data_entrada = entry_entrada.get().strip()
+                data_validade = entry_vencimento.get().strip()
+
+                entrada_valida = validar_data(data_entrada)
+                validade_valida = validar_data(data_validade)
+
+                if not entrada_valida:
+                    messagebox.showerror("Erro", "Data de entrada inválida. Use o formato dd/mm/aaaa.")
+
+                if not validade_valida:
+                    messagebox.showerror("Erro", "Data de vencimento inválida. Use o formato dd/mm/aaaa.")
+
         self.btn_salvar = ttk.Button(frame_cadastro, text="Salvar", command=salvar)
         self.btn_salvar.pack(pady=10)
 
