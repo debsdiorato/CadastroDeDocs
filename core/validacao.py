@@ -18,7 +18,7 @@ def validar_data_vencimento(data_str):
     try: 
         data = datetime.strptime(data_str, "%d/%m/%Y")
         if data.date() < datetime.today().date():
-            return False, "Data de vencimento já passou."
+            return False, "Data de vencimento expirada."
         return True, ""
     except ValueError:
         return False, "Data inválida. Use o formato dd/mm/aaaa."
@@ -33,5 +33,9 @@ def validar_documento(dados):
     ok, msg = validar_data_vencimento(dados.get("vencimento", ""))
     if not ok:
         erros.append(msg)
+
+    entrada = dados.get("entrada", "")
+    if not validar_data(entrada):
+        erros.append("Data de entrada inválida. Use o formato dd/mm/aaaa.")
 
     return erros
